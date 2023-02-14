@@ -1,14 +1,18 @@
 import './App.css';
-import ProfilePhoto from './Components/Profile/ProfilePhoto';
-import Address from './Components/Profile/Address';
-import FullName from './Components/Profile/FullName';
+import Profile from './Components/Profile/Profile';
 
 function App() {
+  const handleName = (fullName) => alert(fullName)
   return (
     <div className='flex items-center justify-center flex-col h-screen'>
-      <ProfilePhoto></ProfilePhoto>
-      <FullName firstName='Adetola' lastName='Adebola'></FullName>
-      <Address></Address>
+      <Profile 
+        fullName='Adetola Adebola' 
+        bio='Trying to watch more sunsets than Netflix' 
+        profession='Daddy | Husband | Software Engineer'
+        handleName={handleName}
+      >
+        <img src='/logo192.png' className='' alt='profile-pic'/>
+      </Profile>
     </div>
   );
 }
