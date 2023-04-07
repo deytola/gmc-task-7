@@ -1,11 +1,11 @@
-import './App.css';
-import {Movies} from './Utils/index';
-import MovieList from './Components/MovieList';
-import Filter from './Components/Filter';
+import '../App.css';
+import {Movies} from '../Utils/index';
+import MovieList from './MovieList';
+import Filter from './Filter';
 import { useEffect, useState } from 'react';
 import { Button, Textarea } from "@material-tailwind/react";
 
-function App() {
+function Home() {
   const [moviesFromDB, setMoviesFromDB] = useState(Movies);
   const [searchText, setSearchText] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -110,7 +110,8 @@ function App() {
         <MovieList  movies={moviesFromDB}/>
       </div>
     </div>
+    
   );
 }
 
-export default App;
+export default Home;

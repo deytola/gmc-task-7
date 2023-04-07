@@ -1,5 +1,5 @@
-import React from 'react'
-import MovieCard from './MovieCard'
+import React from 'react';
+import MovieCard from './MovieCard';
 
 export default function MovieList(props) {
     const {movies} = props
@@ -7,6 +7,7 @@ export default function MovieList(props) {
         return (
             <MovieCard 
                 key = {index}
+                id = {movie.id}
                 title={movie.title} 
                 description={movie.description} 
                 posterURL={movie.posterURL} 
