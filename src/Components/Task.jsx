@@ -1,77 +1,47 @@
-import '../App.css';
-import TodoList from './ListTask';
-import { useEffect, useState } from 'react';
-import { Button, Textarea } from "@material-tailwind/react";
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { useState } from 'react';
+import {
+    Card,
+    CardBody,
+    CardFooter,
+    Typography,
+    Checkbox,
+    IconButton,
+    Button,
+    Textarea
+} from "@material-tailwind/react";
 import { useDispatch } from 'react-redux';
-import { addTodo } from '../features/todo/todoSlice';
-import Filter from '../Components/Filter';
+import { updateTodo } from '../features/todo/todoSlice';
 
-function Home() {
-    let todos = useSelector((state) => state.todos);
-    const original_todos = todos;
-    const [tasks, setTasks] = useState(todos);
+
+
+export default function Task(props) {
+    const { id, description, isDone} = props;
     const [showModal, setShowModal] = useState(false);
-    const [searchCriteria, setSearchCriteria] = useState(undefined);
-
     const dispatch = useDispatch();
-    const [newTask, setNewTask] = useState({
-        description: '',
-        isDone: false
+    const [task, setTask] = useState({
+        id,
+        description,
+        isDone
     });
+    const updateTask = () => {
+        dispatch(updateTodo(task));
+        setShowModal(false);
+    }
     const handleFormChange = (evt) => {
         const key = evt.target.id;
-        setNewTask({ ...newTask, [key]: evt.target.value })
-    }
-    const changeListener = (event) => {
-        console.log('Setting criteria', event.target.value)
-        setSearchCriteria(event.target.value);
-    }
-
-    useEffect(() => {
-        switch(searchCriteria){
-            case 'Done':
-                setTasks([...todos].filter((todo) => todo.isDone === true))
-                console.log('applied effect', tasks)
-
-                break;
-            case 'Undone':
-                setTasks([...todos].filter((todo) => todo.isDone === false));
-                break;
-            default:
-                setTasks(original_todos);
-                break;
+        if(key === 'isDone'){
+            setTask({ ...task, [key]: evt.target.value === 'on' ? true : false })
+        }else{
+            setTask({ ...task, [key]: evt.target.value })
         }
-    }, [searchCriteria]);
-
-    useEffect(() => {
-        setTasks(todos);
-    }, [todos]);
-
-
-
-    const handleSubmit = () => {
-        setShowModal(false);
-        dispatch(addTodo(newTask));
-        setNewTask({});
     }
-
-
-
+    const editTask = () => {
+        setShowModal(true);
+    }
     return (
-        <div className='flex flex-col h-screen items-center w-auto'>
+        <div>
             <div>
-                <div className='flex items-center justify-between w-96'>
-                    <Filter className='mb-2 flex-start' changeListener={changeListener}/>
-                    <Button
-                        variant='outlined'
-                        className='mt-2 flex-end'
-                        onClick={() => setShowModal(true)}
-                    >
-                        New Task
-                    </Button>
-                </div>
-            
                 {showModal ? (
                     <div>
                         <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -91,7 +61,10 @@ function Home() {
                                     <div className="relative p-6 flex-auto">
                                         <form className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 w-full space-y-3">
                                             <div className="w-full">
-                                                <Textarea placeholder="Task description..." id={'description'} value={newTask['description']} onChange={handleFormChange} />
+                                                <Textarea placeholder="Task description..." id={'description'} value={task['description']} onChange={handleFormChange} />
+                                            </div>
+                                            <div>
+                                                <Checkbox id={'isDone'} color="green" checked={task['isDone']} onChange={handleFormChange}/>
                                             </div>
                                         </form>
                                     </div>
@@ -107,9 +80,9 @@ function Home() {
                                             variant='outlined'
                                             className="text-[#2196f3]"
                                             type="button"
-                                            onClick={handleSubmit}
+                                            onClick={updateTask}
                                         >
-                                            Create
+                                            Update
                                         </Button>
                                     </div>
                                 </div>
@@ -118,12 +91,20 @@ function Home() {
                     </div>
                 ) : null}
             </div>
-            <div className='flex p-8'>
-                <TodoList todos={tasks} />
-            </div>
+            <Card className="w-96 m-5">
+                <CardBody className="text-left">
+                    <Typography variant="h5" className="mb-2">
+                        {description}
+                    </Typography>
+                </CardBody>
+                <CardFooter >
+                    <Checkbox color="green" checked={isDone} readOnly={true}/>
+                    <IconButton variant="outlined" onClick={editTask}>
+                        <i className="fas fa-edit" />
+                    </IconButton>
+                </CardFooter>
+            </Card>
         </div>
-
-    );
+        
+    )
 }
-
-export default Home;

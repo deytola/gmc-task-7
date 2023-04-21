@@ -1,11 +1,29 @@
 import React from 'react';
+import {
+    Menu,
+    MenuHandler,
+    MenuList,
+    MenuItem,
+    IconButton,
+  } from "@material-tailwind/react";
 
 
 export default function Filter(props) {
-    const {changeListener, searchQuery} = props;
+    const {changeListener} = props;
     return (
         <div className='flex items-center mt-2'>
-            <input className='text w-96 p-2 rounded-lg border-solid border border-sky-500 border-[#2196f3]' placeholder={'Search movies...'} onChange={changeListener} value={searchQuery}/>
+            <Menu>
+                <MenuHandler>
+                    <IconButton variant="outlined">
+                        <i className="fas fa-filter"/>
+                    </IconButton>
+                </MenuHandler>
+                <MenuList>
+                    <MenuItem value={undefined} onClick={changeListener}>Select Filter...</MenuItem>
+                    <MenuItem value={'Done'} onClick={changeListener}>Done</MenuItem>
+                    <MenuItem value={'Undone'} onClick={changeListener}>Undone</MenuItem>
+                </MenuList>
+            </Menu>
         </div>
     )
 }
